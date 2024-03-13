@@ -31,7 +31,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/admin/registry', function(){
+Route::get('/admin/registr', function(){
     return view('admin.register');
 });
 
