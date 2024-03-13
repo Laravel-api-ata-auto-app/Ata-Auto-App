@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag and Drop Example</title>
+  <style>
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      width: 300px;
+      height: 300px;
+      border: 2px solid black;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .image {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      border: 2px solid transparent;
+      cursor: grab;
+    }
+
+    .image.dragging {
+      opacity: 0.5;
+      border: 2px dashed red;
+    }
+
+    .image.over {
+      border: 2px dashed green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="box" id="box">
+      <img src="img1.jpg" alt="Image 1" class="image" id="img1" draggable="true">
+      <img src="img2.jpg" alt="Image 2" class="image" id="img2" draggable="true">
+      <img src="img3.jpg" alt="Image 3" class="image" id="img3" draggable="true">
+      <img src="img4.jpg" alt="Image 4" class="image" id="img4" draggable="true">
+      <img src="img5.jpg" alt="Image 5" class="image" id="img5" draggable="true">
+      <img src="img6.jpg" alt="Image 6" class="image" id="img6" draggable="true">
+      <img src="img7.jpg" alt="Image 7" class="image" id="img7" draggable="true">
+      <img src="img8.jpg" alt="Image 8" class="image" id="img8" draggable="true">
+      <img src="img9.jpg" alt="Image 9" class="image" id="img9" draggable="true">
+    </div>
+  </div>
+  <script>
+    // get the box element
+    const box = document.getElementById("box");
+    // get all the image elements
+    const images = document.querySelectorAll(".image");
+    // initialize the variables for the dragged and dropped elements
+    let dragged = null;
+    let dropped = null;
+
+    // loop through the images and add the event listeners
+    for (let image of images) {
+      // when the image is dragged, set the dragged variable and add the dragging class
+      image.addEventListener("dragstart", function (e) {
+        dragged = e.target;
+        dragged.classList.add("dragging");
+      });
+
+      // when the image is dropped, remove the dragging class and append the dragged element before the dropped element
+      image.addEventListener("drop", function (e) {
+        e.preventDefault();
+        dropped = e.target;
+        dragged.classList.remove("dragging");
+        box.insertBefore(dragged, dropped);
+      });
+
+      // when the image is dragged over, prevent the default behavior and add the over class
+      image.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        e.target.classList.add("over");
+      });
+
+      // when the image is dragged out, remove the over class
+      image.addEventListener("dragleave", function (e) {
+        e.target.classList.remove("over");
+      });
+
+      // when the image is dragged end, remove the over class
+      image.addEventListener("dragend", function (e) {
+        e.target.classList.remove("over");
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag and Drop File Upload Example</title>
+  <style>
+    /* style the form element */
+    form {
+      width: 400px;
+      margin: 20px auto;
+    }
+
+    /* style the label element as the drop zone */
+    label {
+      display: block;
+      width: 100%;
+      height: 200px;
+      border: 4px dashed gray;
+      background-color: lightgray;
+      line-height: 200px;
+      text-align: center;
+      font-size: 20px;
+      color: black;
+    }
+
+    /* hide the input element */
+    input {
+      display: none;
+    }
+
+    /* style the progress element */
+    progress {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    /* style the result element */
+    #result {
+      font-size: 16px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <!-- create a form element with an input element of type file and a label element as the drop zone -->
+  <form id="form" enctype="multipart/form-data">
+    <input type="file" id="file" name="file" multiple>
+    <label for="file" id="label">Drag and drop files here or click to select</label>
+    <progress id="progress" value="0" max="100"></progress>
+    <div id="result"></div>
+  </form>
+  <script>
+    // get the form, file, label, progress, and result elements
+    const form = document.getElementById("form");
+    const file = document.getElementById("file");
+    const label = document.getElementById("label");
+    const progress = document.getElementById("progress");
+    const result = document.getElementById("result");
+
+    // prevent the default behavior of the dragover event on the label element
+    label.addEventListener("dragover", function (e) {
+      e.preventDefault();
+    });
+
+    // handle the drop event on the label element
+    label.addEventListener("drop", function (e) {
+      // prevent the default behavior of the drop event
+      e.preventDefault();
+      // get the files from the dataTransfer object
+      const files = e.dataTransfer.files;
+      // set the files to the input element
+      file.files = files;
+      // upload the files
+      uploadFiles(files);
+    });
+
+    // handle the change event on the input element
+    file.addEventListener("change", function (e) {
+      // get the files from the input element
+      const files = e.target.files;
+      // upload the files
+      uploadFiles(files);
+    });
+
+    // define a function to upload files
+    function uploadFiles(files) {
+      // create a new FormData object
+      const formData = new FormData();
+      // loop through the files and append them to the FormData object
+      for (let i = 0; i < files.length; i++) {
+        formData.append("file", files[i]);
+      }
+      // create a new XMLHttpRequest object
+      const xhr = new XMLHttpRequest();
+      // open a POST request to the server
+      xhr.open("POST", "upload.php");
+      // handle the load event of the request
+      xhr.addEventListener("load", function (e) {
+        // if the status is 200 (OK)
+        if (xhr.status === 200) {
+          // display the response text in the result element
+          result.textContent = xhr.responseText;
+        } else {
+          // display an error message in the result element
+          result.textContent = "Error: " + xhr.status;
+        }
+      });
+      // handle the error event of the request
+      xhr.addEventListener("error", function (e) {
+        // display an error message in the result element
+        result.textContent = "Error: " + e.type;
+      });
+      // handle the progress event of the request
+      xhr.upload.addEventListener("progress", function (e) {
+        // if the lengthComputable property is true
+        if (e.lengthComputable) {
+          // calculate the percentage of the upload
+          const percent = Math.round((e.loaded / e.total) * 100);
+          // set the value and the text of the progress element
+          progress.value = percent;
+          progress.textContent = percent + "%";
+        }
+      });
+      // send the FormData object to the server
+      xhr.send(formData);
+    }
+  </script>
+</body>
+</html>
