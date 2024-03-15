@@ -12,6 +12,7 @@ class categoryController extends Controller
     public function index(){
         $Categories=category::all();
         
+        //  return response()->json($Categories);
          return view('admin.category.index')->with('categories',$Categories );
     }
     public function create(){

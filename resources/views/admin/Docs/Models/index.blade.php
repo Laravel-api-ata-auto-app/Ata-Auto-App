@@ -34,7 +34,10 @@
                         @endif
                    
                 </td>
-                <td><a>
+                <td>
+                <a href="{{ url('/public/uploads/') }}" class="btn btn-outline-danger ">
+                    View
+                </a>
                 <a href="{{ url('/admin/Docs/'.$repairdoc->Brand.'/'.$repairdoc->ModelName.'/edit') }}" class="btn btn-outline-danger ">
                     Add New/Update Document
                 </a>
