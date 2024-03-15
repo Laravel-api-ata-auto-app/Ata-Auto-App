@@ -17,4 +17,4 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('api/category',[\App\Http\Controllers\api\admin\categorycontroller::class,'index']);
+Route::get('/category',[\App\Http\Controllers\api\admin\categorycontroller::class,'index']);
